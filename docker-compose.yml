@@ -1,0 +1,60 @@
+# compose version 2
+version: '2'
+
+volumes:
+    database_data:
+        driver: local
+
+services:
+# Nginx container
+    nginx:
+        image: nginx:latest
+        ports:
+            - 80:80 # outised port : inside port
+        volumes:
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+        volumes_from:
+            - php
+
+# PHP container
+    php:
+        build: ./php/
+        expose:
+            - 9000
+        volumes:
+            - ./project/:/var/www/html
+            - ./php/php.ini:/usr/local/etc/php/conf.d/php.ini
+            - ./php/logs/:/usr/local/etc/php/logs/
+
+# Testing container
+#    testing:
+#        build: ./php/
+#        volumes_from:
+#            - php
+
+# MySQL container
+    mysql:
+        build: ./mysql/ #mysql:latest
+        expose:
+            - 3306
+        volumes:
+            - database_data:/var/lib/mysql
+            #- ./mysql/mysql-log:/var/log/mysql/
+            - ./mysql/mysql.cnf:/etc/mysql/conf.d/source/mysql.cnf
+        #restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: docker
+            MYSQL_DATABASE: anatomy
+            MYSQL_USER: docker
+            MYSQL_PASSWORD: docker
+
+# PHP my admin (untested)
+#    phpmyadmin:
+#        image: phpmyadmin/phpmyadmin
+#        links:
+#            - mysql:db
+#        ports:
+#            - 8181:80
+#        environment:
+#            PMA_USER: root
+#            PMA_PASSWORD: docker

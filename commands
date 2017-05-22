@@ -1,0 +1,10 @@
+# start
+docker-compose up -d
+
+# remove everything
+docker stop $(docker ps -q)
+docker-compose rm -v
+docker volume rm lampdevel_database_data
+
+# start shell in container
+docker exec -it container bash

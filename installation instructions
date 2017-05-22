@@ -1,0 +1,59 @@
+cd ~
+
+# download docker
+wget https://get.docker.com/builds/Linux/x86_64/docker-1.12.6.tgz
+wget https://github.com/docker/compose/releases/download/1.11.2/docker-compose-Linux-x86_64
+
+# extract and install docker
+tar -xvzf docker-1.12.6.tgz
+chmod +x docker-compose-Linux-x86_64
+sudo mv docker-compose-Linux-x86_64 /usr/bin/docker-compose
+sudo cp docker/* /usr/bin
+
+# start dockers daemon
+sudo dockerd &
+
+# download my docker project
+git clone https://github.com/rcrimp/AnatomyViewer.git
+cd AnatomyViewer/LAMP-devel/
+docker-compose up -d 
+
+
+
+
+sudo yum install -y yum-utils
+
+sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+
+sudo yum makecache fast
+
+sudo yum-config-manager --add-repo https://docs.docker.com/engine/installation/linux/repo_files/centos/docker.repo
+
+
+
+# installation script doesn't work
+wget https://raw.githubusercontent.com/rancher/install-docker/master/1.12.6.sh
+
+
+
+# CentOS 7 machine
+sudo yum install git
+sudo yum install wget
+
+# docker 1.12.6
+wget https://yum.dockerproject.org/repo/main/centos/7/Packages/docker-engine-1.12.6-1.el7.centos.x86_64.rpm
+sudo yum install docker-engine-1.12.6-1.el7.centos.x86_64.rpm
+
+# docker-compose 1.11.2
+wget https://github.com/docker/compose/releases/download/1.11.2/docker-compose-Linux-x86_64
+chmod +x docker-compose-Linux-x86_64
+sudo cp docker-compose-Linux-x86_64 /usr/bin/docker-compose
+
+# start docker service
+sudo service docker start
+
+# copy project
+git clone https://github.com/rcrimp/AnatomyViewer.git
+sudo docker-compose up -d
